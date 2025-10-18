@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="status_working">Inafanya kazi... Tuma SMS!</string>
+    <string name="status_no_permission">Ruhusa za SMS hazikubaliki!</string>
+    <string name="app_name">Mixx SMS Receiver</string>
+</resources>
