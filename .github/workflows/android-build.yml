@@ -24,26 +24,37 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
+    - name: Debug - List project files
+      run: |
+        echo "📁 Project structure:"
+        find . -name "*.java" -o -name "*.xml" -o -name "*.gradle" | sort
+        echo "📦 Gradle files:"
+        find . -name "*.gradle" -type f
+        echo "🎨 Resource files:"
+        find app/src/main/res -type f 2>/dev/null || echo "No resource files found"
+      
     - name: Make gradlew executable
       run: chmod +x ./gradlew
       
-    - name: Build with Gradle
+    - name: Build with Gradle (Debug)
       run: |
-        ./gradlew assembleDebug --stacktrace
-        echo "✅ Build complete!"
+        echo "🔨 Starting Gradle build..."
+        ./gradlew clean assembleDebug --stacktrace --no-daemon
+        echo "✅ Build command completed"
         
-    - name: Find and list APK files
+    - name: Find APK files
       run: |
         echo "🔍 Searching for APK files..."
-        find . -name "*.apk" -type f | while read file; do
-          echo "📱 Found: $file"
-          ls -la "$file"
-        done
+        find . -name "*.apk" -type f
+        echo "📁 Build outputs directory:"
+        ls -la app/build/outputs/ || echo "No build outputs directory"
+        ls -la app/build/ || echo "No build directory"
         
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: mixx-sms-receiver-apk
         path: app/build/outputs/apk/**/*.apk
+        if-no-files-found: warn
         retention-days: 30
 

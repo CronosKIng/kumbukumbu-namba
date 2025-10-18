@@ -7,30 +7,26 @@
     android:gravity="center">
 
     <TextView
+        android:id="@+id/statusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="📱 Kumbukumbu Namba System"
-        android:textSize="24sp"
+        android:text="@string/status_working"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="24dp" />
 
     <TextView
-        android:id="@+id/statusText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🔍 Inaanzisha service..."
-        android:textSize="16sp"
-        android:padding="16dp"
-        android:background="#f0f0f0"
-        android:gravity="center" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="📨 Inasoma SMS za Mixx by Yas tu\n💰 Inatumia malipo ya TSh 300 pekee\n✅ Inatuma kwenye server automatically"
+        android:text="Mixx by YAS SMS Receiver"
         android:textSize="14sp"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:lineSpacingExtra="8dp" />
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inasoma SMS za malipo tu"
+        android:textSize="12sp"
+        android:textColor="#666" />
 
 </LinearLayout>
