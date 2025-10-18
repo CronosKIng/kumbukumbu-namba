@@ -3,7 +3,6 @@ name: Build Android APK
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   build:
@@ -22,28 +21,36 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
+    - name: Debug - Show project structure
+      run: |
+        echo "=== Project Files ==="
+        find . -name "*.java" -o -name "*.gradle" -o -name "*.xml" | sort
+        echo "=== Gradle Wrapper ==="
+        ls -la gradle/wrapper/ 2>/dev/null || echo "No gradle wrapper"
+        echo "=== Gradlew ==="
+        ls -la gradlew
+        echo "=== Build Files ==="
+        ls -la *.gradle
+      
     - name: Build with Gradle
       run: |
         chmod +x ./gradlew
-        ./gradlew clean assembleDebug --no-daemon
+        ./gradlew clean assembleDebug --stacktrace --no-daemon
+        echo "Build exit code: $?"
         
-    - name: Find and Upload APK
+    - name: Find APK files
       run: |
-        echo "🔍 Searching for APK files..."
+        echo "=== Searching for APK files ==="
         find . -name "*.apk" -type f
-        if find . -name "*.apk" -type f | grep -q .; then
-          echo "✅ APK found!"
-        else
-          echo "❌ No APK found. Build directory:"
-          ls -la app/build/ || echo "No build directory"
-          ls -la app/build/outputs/ || echo "No outputs directory"
-        fi
+        echo "=== Build outputs ==="
+        ls -la app/build/ 2>/dev/null || echo "No build directory"
+        ls -la app/build/outputs/ 2>/dev/null || echo "No outputs directory"
+        ls -la app/build/outputs/apk/ 2>/dev/null || echo "No apk directory"
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: mixx-sms-apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: app/build/outputs/apk/**/*.apk
         if-no-files-found: ignore
-        retention-days: 30
 
