@@ -8,6 +8,6 @@ import android.util.Log;
 public class SmsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("MixxSMS", "SMS Receiver Active - Mixx by YAS");
+        Log.i("MixxSMS", "SMS Receiver Active - Ready for Mixx by YAS");
     }
 }

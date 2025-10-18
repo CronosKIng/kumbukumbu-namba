@@ -2,16 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ghosttester.kumbukumbu">
 
-    <!-- SMS Permissions -->
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="Kumbukumbu Namba"
-        android:theme="@android:style/Theme.DeviceDefault.Light">
+        android:label="Mixx SMS Receiver"
+        android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar">
 
         <activity
             android:name=".MainActivity"
@@ -22,7 +20,6 @@
             </intent-filter>
         </activity>
 
-        <!-- SMS Receiver -->
         <receiver
             android:name=".SmsReceiver"
             android:enabled="true"

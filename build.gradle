@@ -9,7 +9,10 @@ buildscript {
 }
 
 allprojects {
-    // NO repositories here - they are defined in settings.gradle
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
 task clean(type: Delete) {
