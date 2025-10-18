@@ -18,13 +18,9 @@ android {
             minifyEnabled false
         }
     }
-
-    // Disable AAPT2 resource processing
-    aaptOptions {
-        ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
-    }
 }
 
 dependencies {
-    // NO DEPENDENCIES
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 }
