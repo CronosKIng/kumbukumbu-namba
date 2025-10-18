@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Kumbukumbu Namba</string>
-    <string name="status_working">✅ Service inafanya kazi - Inasoma SMS za Mixx by Yas</string>
-    <string name="status_no_permission">❌ Hakuna ruhusa ya kusoma SMS</string>
+    <string name="app_name">Mixx SMS Receiver</string>
 </resources>
