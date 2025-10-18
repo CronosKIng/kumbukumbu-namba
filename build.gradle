@@ -4,15 +4,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.4.2"
+        classpath 'com.android.tools.build:gradle:7.4.2'
     }
 }
 
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+    // ONDOA repositories hapa - ziko kwenye settings.gradle
 }
 
 task clean(type: Delete) {
