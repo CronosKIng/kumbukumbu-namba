@@ -1,2 +1,2 @@
-rootProject.name = "MixxSMSReceiver"
+rootProject.name = "MixxSMS"
 include ':app'
