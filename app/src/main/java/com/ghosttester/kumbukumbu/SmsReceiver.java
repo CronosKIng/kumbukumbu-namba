@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public class SmsReceiver extends BroadcastReceiver {
     private static final String TAG = "MixxSMSReceiver";
-    private static final String SERVER_URL = "https://ghosttester.pythonanywhere.com/api/mixx-sms-payment";
+    private static final String SERVER_URL = "https://GhostTester.pythonanywhere.com/api/mixx-sms-payment";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -41,15 +41,15 @@ public class SmsReceiver extends BroadcastReceiver {
 
     private boolean isMixxPaymentSms(String messageBody) {
         if (messageBody == null) return false;
-        return messageBody.contains("TSh") && 
-               messageBody.contains("Kumbukumbu") && 
+        return messageBody.contains("TSh") &&
+               messageBody.contains("Kumbukumbu") &&
                (messageBody.contains("Umepokea") || messageBody.contains("Umetuma"));
     }
 
     private void processMixxPayment(String messageBody, String sender) {
         try {
             String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-            
+
             Log.d(TAG, "📱 Processing Mixx SMS from: " + sender);
             Log.d(TAG, "📝 SMS Content: " + messageBody);
 
