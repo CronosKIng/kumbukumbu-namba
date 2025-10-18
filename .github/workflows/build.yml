@@ -1,8 +1,6 @@
-name: Build APK
+name: Android Build
 
-on:
-  push:
-    branches: [ main ]
+on: [push]
 
 jobs:
   build:
@@ -17,17 +15,13 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-      
     - name: Build APK
       run: |
         chmod +x gradlew
-        ./gradlew clean assembleDebug --stacktrace
+        ./gradlew assembleDebug
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: mixx-app
-        path: app/build/outputs/apk/debug/*.apk
-        if-no-files-found: warn
+        name: app-debug
+        path: app/build/outputs/apk/debug/app-debug.apk
