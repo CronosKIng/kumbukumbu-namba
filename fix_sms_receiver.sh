@@ -1,3 +1,10 @@
+#!/bin/bash
+
+# Backup the original file
+cp app/src/main/java/com/ghosttester/kumbukumbu/SmsReceiver.java app/src/main/java/com/ghosttester/kumbukumbu/SmsReceiver.java.backup
+
+# Create the fixed version
+cat > app/src/main/java/com/ghosttester/kumbukumbu/SmsReceiver.java << 'FIXED'
 package com.ghosttester.kumbukumbu;
 
 import android.content.BroadcastReceiver;
@@ -110,3 +117,11 @@ public class SmsReceiver extends BroadcastReceiver {
         }
     }
 }
+FIXED
+
+echo "✅ SmsReceiver.java has been fixed!"
+echo "🔧 Changes made:"
+echo "   - Added JSONObject for proper JSON formatting"
+echo "   - Fixed string escaping issues"
+echo "   - Added better logging"
+echo "   - Added User-Agent header"
