@@ -9,7 +9,7 @@ buildscript {
 }
 
 allprojects {
-    // NO repositories here - they go in settings.gradle
+    // NO repositories here - they are defined in settings.gradle
 }
 
 task clean(type: Delete) {

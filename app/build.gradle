@@ -20,8 +20,6 @@ android {
     }
 }
 
-// NO repositories block here - they are in settings.gradle
-
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
