@@ -21,36 +21,29 @@ jobs:
         
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
-      with:
-        api-level: 33
-        build-tools: 33.0.0
-      
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
       
     - name: Build with Gradle
       run: |
-        ./gradlew clean assembleDebug --stacktrace --no-daemon
-        echo "Build exit code: $?"
+        chmod +x ./gradlew
+        ./gradlew clean assembleDebug --no-daemon
         
-    - name: Debug - List all files
+    - name: Find and Upload APK
       run: |
-        echo "=== Project Structure ==="
-        find . -type f -name "*.java" -o -name "*.xml" -o -name "*.gradle" | sort
-        echo "=== Build Outputs ==="
-        find . -name "build" -type d | head -5
-        echo "=== APK Search ==="
-        find . -name "*.apk" -type f 2>/dev/null || echo "No APK files found"
-        echo "=== Gradle Files ==="
-        ls -la *.gradle* 2>/dev/null || echo "No gradle files"
+        echo "🔍 Searching for APK files..."
+        find . -name "*.apk" -type f
+        if find . -name "*.apk" -type f | grep -q .; then
+          echo "✅ APK found!"
+        else
+          echo "❌ No APK found. Build directory:"
+          ls -la app/build/ || echo "No build directory"
+          ls -la app/build/outputs/ || echo "No outputs directory"
+        fi
         
-    - name: Upload APK artifact
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: mixx-sms-receiver-apk
-        path: |
-          app/build/outputs/apk/**/*.apk
-          app/build/**/*.apk
-        if-no-files-found: warn
+        name: mixx-sms-apk
+        path: app/build/outputs/apk/debug/app-debug.apk
+        if-no-files-found: ignore
         retention-days: 30
 
