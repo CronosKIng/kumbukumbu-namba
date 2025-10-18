@@ -4,6 +4,7 @@ plugins {
 
 android {
     compileSdk 33
+    namespace 'com.ghosttester.kumbukumbu'
 
     defaultConfig {
         applicationId "com.ghosttester.kumbukumbu"
@@ -20,7 +21,7 @@ android {
     }
 }
 
+// NO DEPENDENCIES - use Android SDK only
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    // No external dependencies - using Android SDK only
 }
