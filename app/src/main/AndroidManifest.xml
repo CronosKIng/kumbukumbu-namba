@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -20,6 +21,13 @@
             </intent-filter>
         </activity>
 
+        <!-- SMS Service -->
+        <service
+            android:name=".SmsService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- SMS Receiver -->
         <receiver
             android:name=".SmsReceiver"
             android:enabled="true"
