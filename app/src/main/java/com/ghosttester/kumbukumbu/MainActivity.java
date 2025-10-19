@@ -12,16 +12,16 @@ import androidx.core.content.ContextCompat;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int SMS_PERMISSION_REQUEST_CODE = 100;
-    
+
     private TextView statusText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         statusText = findViewById(R.id.statusText);
-        
+
         // Check and request SMS permissions automatically
         checkAndRequestSmsPermissions();
     }
@@ -29,8 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkAndRequestSmsPermissions() {
         String[] requiredPermissions = {
             Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.READ_SMS,
-            Manifest.permission.SEND_SMS
+            Manifest.permission.READ_SMS
         };
 
         boolean allPermissionsGranted = true;
@@ -41,14 +40,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (allPermissionsGranted) {
-            // All permissions already granted
-            updateStatus("✅ Permissions granted - App is monitoring Mixx payments");
-            Toast.makeText(this, "App is ready to monitor Mixx payments", Toast.LENGTH_LONG).show();
-        } else {
-            // Request permissions
-            updateStatus("📱 Requesting SMS permissions...");
+        if (!allPermissionsGranted) {
             ActivityCompat.requestPermissions(this, requiredPermissions, SMS_PERMISSION_REQUEST_CODE);
+        } else {
+            updateStatus("Permissions zimepeanwa. App iko tayari!");
         }
     }
 
@@ -66,11 +61,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (allGranted) {
-                updateStatus("✅ Permissions granted - Monitoring Mixx payments");
-                Toast.makeText(this, "App is now monitoring Mixx payment SMS", Toast.LENGTH_LONG).show();
+                updateStatus("Permissions zimepeanwa. App iko tayari!");
             } else {
-                updateStatus("❌ Permissions denied - App cannot monitor SMS");
-                Toast.makeText(this, "Please grant SMS permissions to monitor Mixx payments", Toast.LENGTH_LONG).show();
+                updateStatus("Ruhusa hazijapewa. App haitafanya kazi.");
+                Toast.makeText(this, "Tafadhali ruhusu SMS permissions kwenye settings", Toast.LENGTH_LONG).show();
             }
         }
     }
