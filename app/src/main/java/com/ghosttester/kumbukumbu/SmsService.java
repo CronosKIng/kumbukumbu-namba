@@ -13,16 +13,22 @@ public class SmsService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "SMS Service Created");
-        
+        Log.d(TAG, "🚀 SMS Service Created");
+
         // Register SMS receiver
         smsReceiver = new SmsReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
         filter.setPriority(1000);
-        
+
         registerReceiver(smsReceiver, filter);
-        Log.d(TAG, "SMS Receiver registered");
+        Log.d(TAG, "✅ SMS Receiver registered - Ready to receive all SMS");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "🚀 SMS Service Started - Monitoring all incoming SMS");
+        return START_STICKY; // Service itaendelea kufanya kazi
     }
 
     @Override
@@ -30,7 +36,7 @@ public class SmsService extends Service {
         super.onDestroy();
         if (smsReceiver != null) {
             unregisterReceiver(smsReceiver);
-            Log.d(TAG, "SMS Receiver unregistered");
+            Log.d(TAG, "❌ SMS Receiver unregistered");
         }
     }
 
