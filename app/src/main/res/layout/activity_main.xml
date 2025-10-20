@@ -8,17 +8,21 @@
 
     <TextView
         android:id="@+id/statusText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Inakagua ruhusa..."
+        android:text="Inaanzisha app..."
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="20dp" />
 
-    <TextView
+    <Button
+        android:id="@+id/requestPermissionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="App ya kusakinisha SMS za malipo ya Mixx"
-        android:textSize="14sp" />
+        android:text="Ruhusu SMS Permissions"
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:visibility="gone" />
 
 </LinearLayout>
