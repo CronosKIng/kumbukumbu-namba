@@ -41,19 +41,10 @@ public class SmsReceiver extends BroadcastReceiver {
         }
     }
 
-    private boolean isMixxPaymentSMS(String sender, String messageBody) {
-        String lowerBody = messageBody.toLowerCase();
-        return sender.contains("M-Pesa") ||
-               sender.contains("MIX") ||
-               sender.contains("MPESA") ||
-               lowerBody.contains("umetuma") ||
-               lowerBody.contains("umepokea") ||
-               lowerBody.contains("tsh") ||
-               lowerBody.contains("kumbukumbu") ||
-               lowerBody.contains("mpesa") ||
-               lowerBody.contains("muamala") ||
-               lowerBody.contains("salio");
-    }
+private boolean isMixxPaymentSMS(String sender, String messageBody) {
+    Log.d(TAG, "🔍 Checking SMS for Mixx patterns");
+    return messageBody != null && (messageBody.contains("TSh") || messageBody.contains("Kumbukumbu") || messageBody.contains("Umepokea") || messageBody.contains("Umetuma"));
+}
 
     private void sendToServer(final String sender, final String messageBody) {
         new Thread(new Runnable() {
